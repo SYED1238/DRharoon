@@ -16,8 +16,6 @@ import {
   User,
   ShieldCheck,
   Phone,
-  ChevronDown,
-  Sparkles,
   Menu,
   X,
 } from 'lucide-react';
@@ -34,7 +32,6 @@ export function PatientLayout({ children }: PatientLayoutProps) {
   const setSelectedPatientId = useClinicStore((state) => state.setSelectedPatientId);
   const settings = useClinicStore((state) => state.settings);
 
-  // Active Patient
   const currentPatient = patients.find((p) => p.id === selectedPatientId) || patients[0];
 
   const navItems = [
@@ -46,6 +43,14 @@ export function PatientLayout({ children }: PatientLayoutProps) {
     { href: '/patient/profile', label: 'My Profile', icon: <User className="w-4 h-4" /> },
   ];
 
+  const mobileBottomTabs = [
+    { href: '/patient', label: 'Home', icon: <Home className="w-5 h-5" /> },
+    { href: '/patient/appointments', label: 'Visits', icon: <Calendar className="w-5 h-5" /> },
+    { href: '/patient/prescriptions', label: 'Rx', icon: <Pill className="w-5 h-5" /> },
+    { href: '/patient/records', label: 'Records', icon: <FileText className="w-5 h-5" /> },
+    { href: '/patient/profile', label: 'Profile', icon: <User className="w-5 h-5" /> },
+  ];
+
   return (
     <div className="min-h-screen bg-[#F5F8F7] flex flex-col text-[#172D32]">
       {/* Universal Portal Switcher */}
@@ -53,29 +58,29 @@ export function PatientLayout({ children }: PatientLayoutProps) {
 
       {/* Patient App Header */}
       <header className="bg-white border-b border-[#E5ECEA] sticky top-8 z-30 shadow-2xs">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3.5 flex flex-wrap items-center justify-between gap-2.5">
+          <div className="flex items-center gap-2">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100"
+              className="md:hidden p-1.5 rounded-lg text-gray-600 hover:bg-gray-100"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
             <BrandLogo size="sm" />
           </div>
 
-          {/* Reviewer Patient Switcher */}
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1.5 bg-[#F5F8F7] px-3 py-1.5 rounded-xl border border-[#E5ECEA]">
-              <span className="text-[11px] text-[#718286] font-medium hidden sm:inline">Viewing as:</span>
+          {/* Patient Switcher */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="flex items-center gap-1 bg-[#F5F8F7] px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl border border-[#E5ECEA] max-w-[200px] sm:max-w-none">
+              <span className="text-[10px] sm:text-[11px] text-[#718286] font-medium hidden xs:inline">Patient:</span>
               <select
                 value={selectedPatientId}
                 onChange={(e) => setSelectedPatientId(e.target.value)}
-                className="bg-transparent text-xs font-bold text-[#123C45] focus:outline-none cursor-pointer pr-1"
+                className="bg-transparent text-[11px] sm:text-xs font-bold text-[#123C45] focus:outline-none cursor-pointer truncate max-w-[140px] sm:max-w-xs"
               >
                 {patients.map((p) => (
                   <option key={p.id} value={p.id}>
-                    {p.name} ({p.age}y / {p.gender})
+                    {p.name} ({p.age}y)
                   </option>
                 ))}
               </select>
@@ -83,7 +88,7 @@ export function PatientLayout({ children }: PatientLayoutProps) {
 
             <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-emerald-800 bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-200/60">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Verified Session</span>
+              <span>Verified</span>
             </div>
           </div>
         </div>
@@ -111,15 +116,15 @@ export function PatientLayout({ children }: PatientLayoutProps) {
           </div>
         </div>
 
-        {/* Mobile Dropdown Nav */}
+        {/* Mobile Dropdown Nav Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-[#E5ECEA] p-3 space-y-1">
+          <div className="md:hidden bg-white border-t border-[#E5ECEA] p-3 space-y-1 shadow-lg">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold ${
                   pathname === item.href ? 'bg-[#123C45] text-white' : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
@@ -131,11 +136,30 @@ export function PatientLayout({ children }: PatientLayoutProps) {
         )}
       </header>
 
-      {/* Patient Page Content Container */}
-      <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 md:p-8">{children}</main>
+      {/* Patient Page Content Container with safe bottom padding for mobile bar */}
+      <main className="flex-1 max-w-6xl w-full mx-auto p-3 sm:p-6 md:p-8 pb-24 md:pb-8">{children}</main>
 
-      {/* Patient Footer */}
-      <footer className="bg-white border-t border-[#E5ECEA] py-6 px-4 text-center text-xs text-[#718286]">
+      {/* Patient Mobile Bottom Sticky Navigation */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E5ECEA] shadow-lg px-2 py-1.5 flex items-center justify-around">
+        {mobileBottomTabs.map((tab) => {
+          const isActive = pathname === tab.href;
+          return (
+            <Link
+              key={tab.href}
+              href={tab.href}
+              className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl text-[10px] font-bold transition-all min-w-[56px] ${
+                isActive ? 'text-[#1C7774]' : 'text-gray-500 hover:text-gray-900'
+              }`}
+            >
+              {tab.icon}
+              <span className="mt-0.5">{tab.label}</span>
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-[#E5ECEA] py-6 px-4 text-center text-xs text-[#718286] hidden md:block">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="font-semibold text-[#123C45]">{settings.clinicName}</span>

@@ -558,9 +558,9 @@ function DoctorConsultationContent() {
               key={med.id}
               className="p-4 rounded-xl border border-[#E5ECEA] bg-[#FAFBFB] hover:border-teal-300 transition-all space-y-3"
             >
-              <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+              <div className="grid grid-cols-2 sm:grid-cols-12 gap-2.5 items-center">
                 {/* Index & Name */}
-                <div className="sm:col-span-4">
+                <div className="col-span-2 sm:col-span-4">
                   <div className="flex items-center gap-2">
                     <span className="w-6 h-6 rounded-md bg-[#123C45] text-white flex items-center justify-center font-bold text-xs shrink-0">
                       {index + 1}
@@ -583,7 +583,7 @@ function DoctorConsultationContent() {
                 </div>
 
                 {/* Dosage */}
-                <div className="sm:col-span-2">
+                <div className="col-span-1 sm:col-span-2">
                   <label className="text-[10px] text-gray-400 font-bold block mb-0.5">Dosage</label>
                   <input
                     type="text"
@@ -595,24 +595,24 @@ function DoctorConsultationContent() {
                 </div>
 
                 {/* Frequency */}
-                <div className="sm:col-span-2">
-                  <label className="text-[10px] text-gray-400 font-bold block mb-0.5">Frequency (M-A-N)</label>
+                <div className="col-span-1 sm:col-span-2">
+                  <label className="text-[10px] text-gray-400 font-bold block mb-0.5">Frequency</label>
                   <select
                     value={med.frequency}
                     onChange={(e) => handleUpdateMedicine(med.id, { frequency: e.target.value })}
                     className="w-full px-2 py-1.5 rounded-lg border border-[#E5ECEA] bg-white text-xs font-bold text-[#1C7774] focus:outline-none"
                   >
-                    <option value="1-0-1">1-0-1 (Morning & Night)</option>
-                    <option value="1-0-0">1-0-0 (Morning Only)</option>
-                    <option value="0-0-1">0-0-1 (Night Only)</option>
-                    <option value="1-1-1">1-1-1 (Thrice Daily)</option>
-                    <option value="0-1-0">0-1-0 (Afternoon Only)</option>
-                    <option value="SOS">SOS (When Needed)</option>
+                    <option value="1-0-1">1-0-1 (M & N)</option>
+                    <option value="1-0-0">1-0-0 (Morning)</option>
+                    <option value="0-0-1">0-0-1 (Night)</option>
+                    <option value="1-1-1">1-1-1 (Thrice)</option>
+                    <option value="0-1-0">0-1-0 (Afternoon)</option>
+                    <option value="SOS">SOS (As needed)</option>
                   </select>
                 </div>
 
                 {/* Timing */}
-                <div className="sm:col-span-2">
+                <div className="col-span-1 sm:col-span-2">
                   <label className="text-[10px] text-gray-400 font-bold block mb-0.5">Timing</label>
                   <select
                     value={med.timing}
@@ -629,7 +629,7 @@ function DoctorConsultationContent() {
                 </div>
 
                 {/* Duration */}
-                <div className="sm:col-span-1">
+                <div className="col-span-1 sm:col-span-1">
                   <label className="text-[10px] text-gray-400 font-bold block mb-0.5">Duration</label>
                   <input
                     type="text"
@@ -640,12 +640,13 @@ function DoctorConsultationContent() {
                 </div>
 
                 {/* Delete */}
-                <div className="sm:col-span-1 text-right">
+                <div className="col-span-2 sm:col-span-1 text-right sm:text-center pt-1 sm:pt-0">
                   <button
                     onClick={() => handleRemoveMedicine(med.id)}
-                    className="p-1.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                    className="p-1.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors inline-flex items-center gap-1 text-xs sm:inline-block"
                   >
                     <Trash2 className="w-4 h-4" />
+                    <span className="sm:hidden text-rose-600 font-semibold text-[11px]">Remove</span>
                   </button>
                 </div>
               </div>
@@ -679,12 +680,12 @@ function DoctorConsultationContent() {
         </div>
 
         {/* Action Buttons */}
-        <div className="pt-4 border-t border-[#E5ECEA] flex flex-wrap items-center justify-between gap-3">
-          <div className="text-xs text-[#718286]">
+        <div className="pt-4 border-t border-[#E5ECEA] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="text-xs text-[#718286] text-center sm:text-left">
             Total {medicines.length} medications prescribed • All changes saved locally
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
             <button
               onClick={() => {
                 if (activePrescription) {
@@ -694,7 +695,7 @@ function DoctorConsultationContent() {
                   setTimeout(() => setWhatsappModalOpen(true), 300);
                 }
               }}
-              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#25D366]/15 hover:bg-[#25D366]/25 text-[#075E54] border border-[#25D366]/40 font-bold text-xs transition-colors"
+              className="flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-[#25D366]/15 hover:bg-[#25D366]/25 text-[#075E54] border border-[#25D366]/40 font-bold text-xs transition-colors"
             >
               <Share2 className="w-4 h-4 text-[#25D366]" />
               <span>Share via WhatsApp</span>
@@ -702,7 +703,7 @@ function DoctorConsultationContent() {
 
             <button
               onClick={handleSavePrescription}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#123C45] hover:bg-[#164a55] text-white font-bold text-xs shadow-md transition-all active:scale-95"
+              className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#123C45] hover:bg-[#164a55] text-white font-bold text-xs shadow-md transition-all active:scale-95"
             >
               <Save className="w-4 h-4 text-[#35A99A]" />
               <span>Save & Generate Prescription (Rx)</span>

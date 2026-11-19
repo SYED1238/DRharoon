@@ -195,9 +195,102 @@ export default function StaffTokenManagementPage() {
         </div>
       </div>
 
-      {/* Queue Table */}
+      {/* Queue View: Desktop Table + Mobile Native Cards */}
       <div className="bg-white rounded-2xl border border-[#E5ECEA] overflow-hidden shadow-2xs">
-        <div className="overflow-x-auto">
+        {/* Mobile Cards (Viewable on screens < md) */}
+        <div className="md:hidden divide-y divide-[#E5ECEA]">
+          {filteredTokens.map((token) => (
+            <div key={token.id} className="p-4 space-y-3">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-2.5">
+                  <span className="px-3 py-1.5 rounded-xl font-mono font-black text-base bg-teal-50 text-[#123C45] border border-teal-200 shadow-2xs">
+                    {token.tokenNumber}
+                  </span>
+                  <div>
+                    <span className="font-bold text-sm text-[#123C45] block">{token.patientName}</span>
+                    <span className="text-[11px] text-gray-500">
+                      {token.patientAge}y • {token.patientGender} • {token.category}
+                    </span>
+                  </div>
+                </div>
+                <StatusBadge status={token.status} type="token" />
+              </div>
+
+              <div className="flex items-center justify-between text-[11px] text-gray-500 bg-[#F5F8F7] px-3 py-1.5 rounded-lg border border-[#E5ECEA]">
+                <span>In at: <strong>{token.arrivalTime}</strong></span>
+                <span>{token.room} • {token.assignedDoctor.split(',')[0]}</span>
+              </div>
+
+              {/* Action Buttons for Mobile */}
+              <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                {token.status === 'waiting' && (
+                  <button
+                    onClick={() => callToken(token.id)}
+                    className="flex-1 py-2 bg-[#1C7774] hover:bg-[#123C45] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-2xs"
+                  >
+                    <Volume2 className="w-3.5 h-3.5 text-[#35A99A]" />
+                    <span>Call to TV</span>
+                  </button>
+                )}
+
+                {token.status === 'called' && (
+                  <>
+                    <button
+                      onClick={() => startConsultation(token.id)}
+                      className="flex-1 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-bold"
+                    >
+                      In Consult
+                    </button>
+                    <button
+                      onClick={() => recallToken(token.id)}
+                      className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-xs font-bold flex items-center gap-1"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>Repeat</span>
+                    </button>
+                  </>
+                )}
+
+                {(token.status === 'waiting' || token.status === 'called') && (
+                  <button
+                    onClick={() => skipToken(token.id)}
+                    className="px-3 py-2 bg-amber-50 text-amber-800 border border-amber-200 rounded-xl text-xs font-bold"
+                  >
+                    Skip
+                  </button>
+                )}
+
+                {(token.status === 'in-consultation' || token.status === 'called') && (
+                  <button
+                    onClick={() => completeToken(token.id)}
+                    className="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold"
+                  >
+                    Mark Done
+                  </button>
+                )}
+
+                {token.status === 'skipped' && (
+                  <button
+                    onClick={() => updateTokenStatus(token.id, 'waiting')}
+                    className="flex-1 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-xl text-xs font-bold"
+                  >
+                    Re-queue
+                  </button>
+                )}
+
+                <button
+                  onClick={() => updateTokenStatus(token.id, 'cancelled')}
+                  className="p-2 text-gray-400 hover:text-rose-600 rounded-xl border border-gray-200"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop Table (Viewable on screens >= md) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-[#FAFBFB] text-[#718286] uppercase font-bold border-b border-[#E5ECEA]">
               <tr>

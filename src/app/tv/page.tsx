@@ -31,6 +31,7 @@ export default function TVDisplayPage() {
   // Live Clock
   const [currentTime, setCurrentTime] = useState('');
   const [currentDate, setCurrentDate] = useState('');
+  const [shortDate, setShortDate] = useState('');
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [voiceVolume, setVoiceVolume] = useState(1.0);
@@ -52,6 +53,12 @@ export default function TVDisplayPage() {
           day: 'numeric',
           month: 'long',
           year: 'numeric',
+        })
+      );
+      setShortDate(
+        now.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
         })
       );
     };
@@ -102,37 +109,38 @@ export default function TVDisplayPage() {
   return (
     <div className="min-h-screen bg-[#0A1A1E] text-white flex flex-col justify-between select-none overflow-hidden font-sans">
       {/* Top Header Bar */}
-      <header className="bg-gradient-to-r from-[#0C2227] via-[#123C45] to-[#0C2227] px-8 py-5 border-b border-[#1C7774]/30 shadow-lg flex items-center justify-between">
+      <header className="bg-gradient-to-r from-[#0C2227] via-[#123C45] to-[#0C2227] px-4 sm:px-8 py-3.5 sm:py-5 border-b border-[#1C7774]/30 shadow-lg flex flex-wrap sm:flex-nowrap items-center justify-between gap-3">
         {/* Clinic Identity */}
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#1C7774] to-[#123C45] flex items-center justify-center border-2 border-[#35A99A]/40 shadow-md">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-8 h-8 text-[#35A99A]">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#1C7774] to-[#123C45] flex items-center justify-center border-2 border-[#35A99A]/40 shadow-md shrink-0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-6 h-6 sm:w-8 sm:h-8 text-[#35A99A]">
               <path d="M12 4v16m-8-8h16" />
               <circle cx="12" cy="12" r="3.5" fill="#35A99A" stroke="none" />
             </svg>
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-black tracking-tight text-white">{settings.clinicName}</h1>
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-[#35A99A]/20 text-[#35A99A] border border-[#35A99A]/40">
-                OPD Live Queue
+              <h1 className="text-base sm:text-2xl font-black tracking-tight text-white">{settings.clinicName}</h1>
+              <span className="hidden xs:inline-block px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-[#35A99A]/20 text-[#35A99A] border border-[#35A99A]/40">
+                OPD Live
               </span>
             </div>
-            <p className="text-xs text-teal-200/80 font-medium mt-0.5">
-              Consultation Room 1 • Dr. Haroon Rashid, MD
+            <p className="text-[11px] sm:text-xs text-teal-200/80 font-medium mt-0.5">
+              Consultation Room 1 • Dr. Haroon Rashid
             </p>
           </div>
         </div>
 
         {/* Live Date & Time Display */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3 sm:gap-6 ml-auto sm:ml-0">
           <div className="text-right">
-            <div className="flex items-center justify-end gap-2 text-xs font-semibold text-teal-200/80 uppercase tracking-wider">
-              <Calendar className="w-3.5 h-3.5 text-[#35A99A]" />
-              <span>{currentDate || 'Loading date...'}</span>
+            <div className="flex items-center justify-end gap-1.5 text-[10px] sm:text-xs font-semibold text-teal-200/80 uppercase tracking-wider">
+              <Calendar className="w-3 h-3 text-[#35A99A]" />
+              <span className="hidden sm:inline">{currentDate || 'Today'}</span>
+              <span className="sm:hidden">{shortDate || 'Today'}</span>
             </div>
-            <div className="text-3xl font-mono font-extrabold tracking-tight text-white flex items-center justify-end gap-2 mt-0.5">
-              <Clock className="w-5 h-5 text-[#35A99A]" />
+            <div className="text-xl sm:text-3xl font-mono font-extrabold tracking-tight text-white flex items-center justify-end gap-1.5 mt-0.5">
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-[#35A99A]" />
               <span>{currentTime || '00:00:00'}</span>
             </div>
           </div>
@@ -140,10 +148,10 @@ export default function TVDisplayPage() {
           {/* Discreet Control Trigger */}
           <button
             onClick={() => setShowControls(!showControls)}
-            className="p-2.5 rounded-xl bg-white/5 hover:bg-white/15 text-teal-200/80 hover:text-white transition-colors border border-white/10"
+            className="p-2 sm:p-2.5 rounded-xl bg-white/5 hover:bg-white/15 text-teal-200/80 hover:text-white transition-colors border border-white/10 shrink-0"
             title="TV Settings & Audio Configuration"
           >
-            {settings.voiceEnabled ? <Volume2 className="w-5 h-5 text-[#35A99A]" /> : <VolumeX className="w-5 h-5 text-gray-400" />}
+            {settings.voiceEnabled ? <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-[#35A99A]" /> : <VolumeX className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />}
           </button>
         </div>
       </header>
